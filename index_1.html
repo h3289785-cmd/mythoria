@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mythoria — Myths & Legends from Every Civilization</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --gold-dim: #7a6030;
+    --dark-bg: #0a0610;
+    --dark-surface: #120d1e;
+    --text-bright: #f5ead0;
+    --text-muted: #9a8a70;
+    --crimson: #8b1a2e;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--dark-bg); color: var(--text-bright); font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.8; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.04; pointer-events: none; z-index: 9999; }
+
+  /* HEADER */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: linear-gradient(to bottom, rgba(10,6,16,0.95) 0%, transparent 100%); border-bottom: 1px solid rgba(201,168,76,0.12); }
+  .logo { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-bright); letter-spacing: 0.15em; text-decoration: none; }
+  .logo .gold { color: var(--gold); }
+  nav { display: flex; gap: 2.5rem; align-items: center; }
+  nav a { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+  nav a:hover { color: var(--gold); }
+  .nav-premium-btn { background: var(--gold) !important; color: var(--dark-bg) !important; padding: 0.5rem 1.2rem !important; font-size: 0.7rem !important; letter-spacing: 0.2em; cursor: pointer; border: none; font-family: 'Cinzel', serif; text-transform: uppercase; transition: background 0.3s !important; }
+  .nav-premium-btn:hover { background: var(--gold-light) !important; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(107,63,160,0.25) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 20% 70%, rgba(139,26,46,0.15) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 60%), var(--dark-bg); }
+  .hero-ornament { font-size: 0.75rem; letter-spacing: 0.5em; color: var(--gold-dim); font-family: 'Cinzel', serif; text-transform: uppercase; margin-bottom: 2rem; position: relative; }
+  .hero-ornament::before, .hero-ornament::after { content: '───'; color: var(--gold-dim); margin: 0 1rem; }
+  .hero h1 { font-family: 'Cinzel Decorative', serif; font-size: clamp(2.8rem, 8vw, 7rem); font-weight: 900; line-height: 1.05; letter-spacing: 0.05em; color: var(--text-bright); text-shadow: 0 0 80px rgba(201,168,76,0.3); margin-bottom: 1rem; }
+  .hero h1 .gold { color: var(--gold); }
+  .hero-sub { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.3rem; color: var(--text-muted); max-width: 560px; margin: 1rem auto 3rem; }
+  .hero-divider { width: 120px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto 3rem; }
+  .hero-btns { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .btn-primary { font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dark-bg); background: var(--gold); border: none; padding: 1rem 3rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+  .btn-outline { font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); background: transparent; border: 1px solid rgba(201,168,76,0.4); padding: 1rem 3rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s; }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text-muted); font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; animation: float 3s ease-in-out infinite; }
+  .scroll-hint svg { width: 16px; opacity: 0.5; }
+  @keyframes float { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+
+  /* SECTION LABELS */
+  .section-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-dim); text-align: center; margin-bottom: 1rem; }
+  .section-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(1.6rem, 4vw, 3rem); font-weight: 700; text-align: center; color: var(--text-bright); margin-bottom: 0.5rem; }
+  .section-rule { width: 60px; height: 1px; background: var(--gold); margin: 1.5rem auto 4rem; }
+
+  /* PREMIUM BADGE on cards */
+  .badge-free { position: absolute; top: 1rem; left: 1rem; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.3rem 0.8rem; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); color: var(--gold); z-index: 2; }
+  .badge-premium { position: absolute; top: 1rem; left: 1rem; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.3rem 0.8rem; background: rgba(139,26,46,0.4); border: 1px solid rgba(192,48,74,0.6); color: #f0a0b0; z-index: 2; }
+  .lock-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; opacity: 0; transition: opacity 0.3s; z-index: 3; pointer-events: none; }
+  .story-card.is-premium:hover .lock-icon { opacity: 0.9; }
+  .story-card.is-premium .story-card-overlay { background: linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(20,5,10,0.5) 50%, rgba(139,26,46,0.15) 100%); }
+
+  /* STORIES GRID */
+  .stories-section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+  .stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(201,168,76,0.1); }
+  .story-card { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 4/5; background: var(--dark-surface); text-decoration: none; display: block; }
+  .story-card:first-child { grid-column: span 2; aspect-ratio: 8/5; }
+  .story-card-bg { position: absolute; inset: 0; transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .story-card:hover .story-card-bg { transform: scale(1.05); }
+  .card-osiris .story-card-bg { background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(201,168,76,0.4) 0%, transparent 60%), linear-gradient(160deg, #1a1000 0%, #0a0800 100%); }
+  .card-athena .story-card-bg { background: radial-gradient(ellipse 60% 70% at 50% 30%, rgba(201,168,76,0.5) 0%, transparent 55%), linear-gradient(180deg, #0d0800 0%, #050300 100%); }
+  .card-medusa .story-card-bg { background: radial-gradient(ellipse 70% 60% at 50% 60%, rgba(107,63,160,0.6) 0%, transparent 55%), linear-gradient(160deg, #1a0a2e 0%, #06030f 100%); }
+  .card-prometheus .story-card-bg { background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(180,60,20,0.5) 0%, transparent 60%), linear-gradient(160deg, #1a0500 0%, #080200 100%); }
+  .card-persephone .story-card-bg { background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(107,63,160,0.4) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 30% 70%, rgba(60,160,100,0.2) 0%, transparent 50%), linear-gradient(160deg, #0f0a1e 0%, #050308 100%); }
+  .card-hades .story-card-bg { background: radial-gradient(ellipse 60% 50% at 50% 70%, rgba(139,26,46,0.4) 0%, transparent 60%), linear-gradient(160deg, #1a0005 0%, #060002 100%); }
+  .story-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 50%, transparent 100%); }
+  .story-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; }
+  .card-myth { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .card-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(1.1rem, 2.5vw, 1.8rem); font-weight: 700; color: var(--text-bright); line-height: 1.2; margin-bottom: 0.8rem; }
+  .card-hook { font-family: 'EB Garamond', serif; font-style: italic; font-size: 0.95rem; color: rgba(245,234,208,0.7); line-height: 1.5; margin-bottom: 1rem; }
+  .card-read-more { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0; transform: translateY(8px); transition: all 0.4s 0.05s; display: flex; align-items: center; gap: 0.5rem; }
+  .card-read-more::after { content: '→'; }
+  .story-card:hover .card-read-more { opacity: 1; transform: translateY(0); }
+  .card-icon { position: absolute; top: 1.5rem; right: 1.5rem; width: 48px; height: 48px; opacity: 0.15; transition: opacity 0.4s; }
+  .story-card:hover .card-icon { opacity: 0.35; }
+
+  /* FULL STORY OVERLAY */
+  .full-story-overlay { position: fixed; inset: 0; z-index: 200; display: none; overflow-y: auto; }
+  .full-story-overlay.active { display: block; }
+  .story-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+  .story-panel { position: relative; max-width: 780px; margin: 4rem auto; padding: 0 1rem 4rem; }
+  .story-panel-inner { background: var(--dark-surface); border: 1px solid rgba(201,168,76,0.2); padding: 4rem; position: relative; overflow: hidden; }
+  .story-panel-inner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+  .story-bg-glow { position: absolute; inset: 0; pointer-events: none; }
+  .close-btn { position: fixed; top: 2rem; right: 2rem; background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); width: 44px; height: 44px; cursor: pointer; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 300; }
+  .close-btn:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+  .story-eyebrow { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .story-eyebrow::before { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.3); }
+  .story-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(1.8rem, 5vw, 3.2rem); font-weight: 700; color: var(--text-bright); line-height: 1.15; margin-bottom: 1rem; }
+  .story-subtitle { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.2rem; color: var(--gold-dim); margin-bottom: 3rem; }
+  .story-drop-cap::first-letter { font-family: 'Cinzel Decorative', serif; font-size: 5rem; font-weight: 900; float: left; line-height: 0.8; margin: 0.1em 0.1em 0 0; color: var(--gold); }
+  .story-body p { margin-bottom: 1.5rem; color: rgba(245,234,208,0.9); }
+  .story-body .verse { border-left: 2px solid var(--gold-dim); padding-left: 1.5rem; margin: 2rem 0; font-style: italic; color: var(--text-muted); }
+  .story-body .pull-quote { font-family: 'Cinzel', serif; font-size: 1.2rem; font-style: normal; color: var(--gold); text-align: center; padding: 2rem; margin: 2rem -1rem; border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2); letter-spacing: 0.05em; }
+  .story-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(201,168,76,0.15); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .myth-tag { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.4rem 1rem; border: 1px solid rgba(201,168,76,0.3); color: var(--gold-dim); }
+
+  /* PAYWALL BLUR OVERLAY inside story */
+  .paywall-blur { position: relative; margin-top: 2rem; }
+  .paywall-blur-content { filter: blur(5px); user-select: none; pointer-events: none; max-height: 180px; overflow: hidden; }
+  .paywall-box { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(to top, rgba(10,6,16,0.98) 40%, transparent 100%); padding: 2rem; text-align: center; z-index: 5; }
+  .paywall-box h3 { font-family: 'Cinzel Decorative', serif; font-size: 1.3rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+  .paywall-box p { font-style: italic; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+  .paywall-unlock-btn { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dark-bg); background: var(--gold); border: none; padding: 0.9rem 2.5rem; cursor: pointer; transition: all 0.3s; }
+  .paywall-unlock-btn:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+
+  /* PRICING SECTION */
+  .pricing-section { padding: 7rem 2rem; position: relative; overflow: hidden; }
+  .pricing-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(45,21,96,0.25) 0%, transparent 70%); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1000px; margin: 0 auto; background: rgba(201,168,76,0.1); }
+  .pricing-card { background: var(--dark-surface); padding: 3rem 2.5rem; position: relative; transition: background 0.3s; }
+  .pricing-card.featured { background: #1a1030; }
+  .pricing-card.featured::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+  .plan-badge { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
+  .plan-name { font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; color: var(--text-bright); margin-bottom: 1.5rem; }
+  .plan-price { font-family: 'Cinzel', serif; margin-bottom: 0.3rem; }
+  .plan-price .amount { font-size: 2.8rem; color: var(--gold); font-weight: 700; }
+  .plan-price .currency { font-size: 1.2rem; color: var(--gold-dim); vertical-align: super; }
+  .plan-price .period { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.2em; }
+  .plan-intl { font-family: 'EB Garamond', serif; font-style: italic; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
+  .plan-features { list-style: none; margin-bottom: 2.5rem; }
+  .plan-features li { font-family: 'EB Garamond', serif; font-size: 0.95rem; color: rgba(245,234,208,0.8); padding: 0.5rem 0; border-bottom: 1px solid rgba(201,168,76,0.08); display: flex; align-items: center; gap: 0.7rem; }
+  .plan-features li::before { content: '✦'; color: var(--gold); font-size: 0.6rem; flex-shrink: 0; }
+  .plan-features li.muted { color: var(--text-muted); }
+  .plan-features li.muted::before { color: #444; }
+  .plan-btn { width: 100%; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; padding: 1rem; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(201,168,76,0.3); background: transparent; color: var(--gold); }
+  .plan-btn:hover { background: rgba(201,168,76,0.08); }
+  .plan-btn.gold { background: var(--gold); color: var(--dark-bg); border-color: var(--gold); }
+  .plan-btn.gold:hover { background: var(--gold-light); }
+  .plan-popular { position: absolute; top: -1px; right: 2rem; background: var(--gold); color: var(--dark-bg); font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.3rem 1rem; }
+  .payment-logos { display: flex; justify-content: center; gap: 1.5rem; margin-top: 3rem; flex-wrap: wrap; align-items: center; }
+  .payment-logo { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); padding: 0.4rem 1rem; }
+
+  /* PAYMENT MODAL */
+  .modal-overlay { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: #0e0a1a; border: 1px solid rgba(201,168,76,0.25); max-width: 480px; width: 90%; padding: 3rem; position: relative; }
+  .modal-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+  .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+  .modal-close:hover { color: var(--gold); }
+  .modal-title { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; color: var(--text-bright); margin-bottom: 0.4rem; }
+  .modal-sub { font-family: 'EB Garamond', serif; font-style: italic; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .modal-plan-display { background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.2); padding: 1.2rem 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .modal-plan-name { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--text-bright); }
+  .modal-plan-price { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold); }
+  .modal-field { margin-bottom: 1.2rem; }
+  .modal-field label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.5rem; }
+  .modal-field input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.15); color: var(--text-bright); padding: 0.8rem 1rem; font-family: 'EB Garamond', serif; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+  .modal-field input:focus { border-color: rgba(201,168,76,0.5); }
+  .modal-field input::placeholder { color: var(--text-muted); }
+  .modal-pay-btn { width: 100%; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dark-bg); background: var(--gold); border: none; padding: 1.1rem; cursor: pointer; margin-top: 0.5rem; transition: all 0.3s; }
+  .modal-pay-btn:hover { background: var(--gold-light); }
+  .modal-pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .modal-security { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; }
+  .modal-currency-toggle { display: flex; gap: 0; margin-bottom: 1.5rem; border: 1px solid rgba(201,168,76,0.2); }
+  .currency-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.2em; padding: 0.6rem; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+  .currency-btn.active { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .success-screen { display: none; text-align: center; padding: 2rem 0; }
+  .success-screen.visible { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-screen h3 { font-family: 'Cinzel Decorative', serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 0.5rem; }
+  .success-screen p { color: var(--text-muted); font-style: italic; }
+
+  /* QUOTE */
+  .quote-section { padding: 6rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .quote-section-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(45,21,96,0.3) 0%, transparent 70%); }
+  .big-quote { font-family: 'EB Garamond', serif; font-style: italic; font-size: clamp(1.5rem, 4vw, 2.6rem); color: var(--text-bright); max-width: 800px; margin: 0 auto 1.5rem; line-height: 1.5; position: relative; }
+  .big-quote::before { content: '"'; font-family: 'Cinzel Decorative', serif; font-size: 6rem; color: var(--gold-dim); position: absolute; top: -2rem; left: -2rem; line-height: 1; opacity: 0.4; }
+  .quote-attr { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim); }
+
+  /* CATEGORIES */
+  .categories-section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .categories-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: rgba(201,168,76,0.1); }
+  .category-item { background: var(--dark-surface); padding: 2.5rem 2rem; text-align: center; cursor: pointer; transition: background 0.3s; text-decoration: none; display: block; }
+  .category-item:hover { background: rgba(201,168,76,0.06); }
+  .cat-glyph { font-size: 2.5rem; margin-bottom: 1rem; display: block; filter: sepia(1) saturate(1.5) brightness(0.7); }
+  .cat-name { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-bright); margin-bottom: 0.4rem; }
+  .cat-count { font-family: 'EB Garamond', serif; font-style: italic; font-size: 0.85rem; color: var(--text-muted); }
+
+  /* NEWSLETTER */
+  .newsletter-section { padding: 6rem 2rem; text-align: center; position: relative; }
+  .newsletter-box { max-width: 560px; margin: 0 auto; }
+  .newsletter-input-row { display: flex; gap: 0; margin-top: 2rem; }
+  .newsletter-input-row input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2); border-right: none; color: var(--text-bright); padding: 0.9rem 1.5rem; font-family: 'EB Garamond', serif; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+  .newsletter-input-row input:focus { border-color: rgba(201,168,76,0.5); }
+  .newsletter-input-row input::placeholder { color: var(--text-muted); }
+  .newsletter-input-row button { background: var(--gold); color: var(--dark-bg); border: none; padding: 0.9rem 2rem; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+  .newsletter-input-row button:hover { background: var(--gold-light); }
+
+  /* FOOTER */
+  footer { border-top: 1px solid rgba(201,168,76,0.1); padding: 3rem 3rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Cinzel Decorative', serif; font-size: 1rem; color: var(--text-bright); letter-spacing: 0.15em; }
+  .footer-copy { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.25em; color: var(--text-muted); text-transform: uppercase; }
+  footer nav { gap: 2rem; }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .hero > * { animation: fadeInUp 1s ease both; }
+  .hero > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero > *:nth-child(4) { animation-delay: 0.55s; }
+  .hero > *:nth-child(5) { animation-delay: 0.7s; }
+  .hero > *:nth-child(6) { animation-delay: 0.85s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    header { padding: 1rem 1.5rem; }
+    nav a:not(.nav-premium-btn) { display: none; }
+    .stories-grid { grid-template-columns: 1fr; }
+    .story-card:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+    .categories-row { grid-template-columns: repeat(3, 1fr); }
+    .story-panel-inner { padding: 2rem 1.5rem; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    footer nav { display: none; }
+    .hero-btns { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo"><span class="gold">M</span>YTHORIA</a>
+  <nav>
+    <a href="#stories">Stories</a>
+    <a href="#pantheons">Pantheons</a>
+    <a href="#pricing">Premium</a>
+    <a href="#subscribe">Subscribe</a>
+    <button class="nav-premium-btn" onclick="openPricingModal('monthly','INR')">Go Premium ✦</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <p class="hero-ornament">Greek · Norse · Hindu · Aztec · Egyptian</p>
+  <h1>They Were <span class="gold">Not</span><br>What You Were Told</h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">Myths & legends from every civilization. The gods were flawed. The monsters were wounded. The heroes were killers. A new myth every day.</p>
+  <div class="hero-btns">
+    <a href="#stories" class="btn-primary">Enter Mythoria</a>
+    <a href="#pricing" class="btn-outline">See Premium Plans</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8l5 5 5-5"/></svg>
+  </div>
+</section>
+
+<!-- STORIES GRID -->
+<section class="stories-section" id="stories">
+  <p class="section-label">Featured Myths</p>
+  <h2 class="section-title">6 Stories That Shook the World</h2>
+  <div class="section-rule"></div>
+  <div class="stories-grid">
+
+    <a class="story-card card-osiris" href="#" onclick="openStory('osiris'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-free">Free</span>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><path d="M24 4 L28 16 L40 16 L30 24 L34 36 L24 28 L14 36 L18 24 L8 16 L20 16 Z"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Egyptian Mythology</p>
+        <h3 class="card-title">The First Betrayal</h3>
+        <p class="card-hook">A king was murdered by his own brother. At a feast. Wearing a smile.</p>
+        <span class="card-read-more">Read the full story</span>
+      </div>
+    </a>
+
+    <a class="story-card card-medusa" href="#" onclick="openStory('medusa'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-free">Free</span>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><circle cx="24" cy="20" r="10"/><path d="M24 6 Q30 2 36 6 M24 6 Q18 2 12 6"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Greek Mythology</p>
+        <h3 class="card-title">Medusa Was Not the Monster</h3>
+        <p class="card-hook">She was the victim. And the god who harmed her was worshipped for a thousand years.</p>
+        <span class="card-read-more">Read the full story</span>
+      </div>
+    </a>
+
+    <a class="story-card card-athena is-premium" href="#" onclick="openStory('athena'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-premium">✦ Premium</span>
+      <div class="lock-icon">🔒</div>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><polygon points="24,4 44,44 4,44"/><line x1="24" y1="4" x2="24" y2="44"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Greek Mythology</p>
+        <h3 class="card-title">Born Screaming</h3>
+        <p class="card-hook">A goddess born from her father's splitting skull. Fully grown. Fully armed. Already screaming.</p>
+        <span class="card-read-more">Unlock story</span>
+      </div>
+    </a>
+
+    <a class="story-card card-prometheus is-premium" href="#" onclick="openStory('prometheus'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-premium">✦ Premium</span>
+      <div class="lock-icon">🔒</div>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><path d="M24 8 L24 40 M16 16 Q24 8 32 16 M12 28 Q24 14 36 28"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Greek Mythology</p>
+        <h3 class="card-title">The Thief Who Loved Mortals</h3>
+        <p class="card-hook">He stole fire from the gods. Not for power. Not for glory. For us.</p>
+        <span class="card-read-more">Unlock story</span>
+      </div>
+    </a>
+
+    <a class="story-card card-persephone is-premium" href="#" onclick="openStory('persephone'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-premium">✦ Premium</span>
+      <div class="lock-icon">🔒</div>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><circle cx="24" cy="24" r="14"/><path d="M24 10 L24 24 L34 32"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Greek Mythology</p>
+        <h3 class="card-title">Queen of Two Worlds</h3>
+        <p class="card-hook">They said she was stolen. They never asked whether she chose to stay.</p>
+        <span class="card-read-more">Unlock story</span>
+      </div>
+    </a>
+
+    <a class="story-card card-hades is-premium" href="#" onclick="openStory('hades'); return false;">
+      <div class="story-card-bg"></div>
+      <div class="story-card-overlay"></div>
+      <span class="badge-premium">✦ Premium</span>
+      <div class="lock-icon">🔒</div>
+      <svg class="card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><path d="M8 44 L24 8 L40 44 M12 32 L36 32"/></svg>
+      <div class="story-card-content">
+        <p class="card-myth">Greek Mythology</p>
+        <h3 class="card-title">The God They Feared to Name</h3>
+        <p class="card-hook">The most misunderstood god in all of mythology. He never started a single war.</p>
+        <span class="card-read-more">Unlock story</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-section-bg"></div>
+  <p class="big-quote" style="position:relative">The myths did not teach that good defeats evil. They taught that everything is more complicated than that.</p>
+  <p class="quote-attr">— On the Nature of Ancient Stories</p>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-bg"></div>
+  <p class="section-label">Choose Your Path</p>
+  <h2 class="section-title">Join the Ancient Rites</h2>
+  <div class="section-rule"></div>
+
+  <div class="pricing-grid">
+
+    <!-- FREE -->
+    <div class="pricing-card">
+      <span class="plan-badge">Mortal Tier</span>
+      <h3 class="plan-name">Free</h3>
+      <div class="plan-price"><span class="amount">₹0</span></div>
+      <p class="plan-intl">Forever free</p>
+      <ul class="plan-features">
+        <li>2 free stories every month</li>
+        <li>Greek & Egyptian myths</li>
+        <li>Weekly newsletter</li>
+        <li class="muted">Premium story archive</li>
+        <li class="muted">New myth every day</li>
+        <li class="muted">All 6 pantheons</li>
+        <li class="muted">Early access stories</li>
+      </ul>
+      <button class="plan-btn" onclick="document.getElementById('stories').scrollIntoView({behavior:'smooth'})">Start Reading Free</button>
+    </div>
+
+    <!-- MONTHLY — FEATURED -->
+    <div class="pricing-card featured">
+      <span class="plan-popular">Most Popular</span>
+      <span class="plan-badge">Demigod Tier</span>
+      <h3 class="plan-name">Monthly</h3>
+      <div class="plan-price">
+        <span class="currency">₹</span><span class="amount">199</span>
+        <span class="period">/ month</span>
+      </div>
+      <p class="plan-intl">or $2.99 USD / £2.49 GBP</p>
+      <ul class="plan-features">
+        <li>Unlimited story access</li>
+        <li>New myth every day</li>
+        <li>All 6 pantheons</li>
+        <li>Full story archive</li>
+        <li>Early access stories</li>
+        <li>Ad-free experience</li>
+        <li class="muted">Annual savings</li>
+      </ul>
+      <button class="plan-btn gold" onclick="openPricingModal('monthly','INR')">Unlock Premium ✦</button>
+    </div>
+
+    <!-- ANNUAL -->
+    <div class="pricing-card">
+      <span class="plan-badge">God Tier</span>
+      <h3 class="plan-name">Annual</h3>
+      <div class="plan-price">
+        <span class="currency">₹</span><span class="amount">1499</span>
+        <span class="period">/ year</span>
+      </div>
+      <p class="plan-intl">or $24.99 USD · Save 30%</p>
+      <ul class="plan-features">
+        <li>Everything in Monthly</li>
+        <li>Save ₹889 vs monthly</li>
+        <li>Exclusive annual stories</li>
+        <li>Behind-the-myth notes</li>
+        <li>Request a myth</li>
+        <li>Priority support</li>
+        <li>God Tier badge</li>
+      </ul>
+      <button class="plan-btn" onclick="openPricingModal('annual','INR')">Get Annual ✦</button>
+    </div>
+
+  </div>
+
+  <!-- Payment logos -->
+  <div class="payment-logos">
+    <span class="payment-logo">UPI</span>
+    <span class="payment-logo">Visa / Mastercard</span>
+    <span class="payment-logo">Razorpay</span>
+    <span class="payment-logo">Net Banking</span>
+    <span class="payment-logo">PayPal</span>
+    <span class="payment-logo">International Cards</span>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories-section" id="pantheons">
+  <p class="section-label">Explore by Tradition</p>
+  <h2 class="section-title">The Pantheons</h2>
+  <div class="section-rule"></div>
+  <div class="categories-row">
+    <a class="category-item" href="#"><span class="cat-glyph">𓂀</span><p class="cat-name">Egyptian</p><p class="cat-count">12 stories</p></a>
+    <a class="category-item" href="#"><span class="cat-glyph">⚡</span><p class="cat-name">Greek</p><p class="cat-count">24 stories</p></a>
+    <a class="category-item" href="#"><span class="cat-glyph">ᚢ</span><p class="cat-name">Norse</p><p class="cat-count">16 stories</p></a>
+    <a class="category-item" href="#"><span class="cat-glyph">ॐ</span><p class="cat-name">Hindu</p><p class="cat-count">18 stories</p></a>
+    <a class="category-item" href="#"><span class="cat-glyph">☀</span><p class="cat-name">Aztec</p><p class="cat-count">11 stories</p></a>
+    <a class="category-item" href="#"><span class="cat-glyph">🜃</span><p class="cat-name">Mesopotamian</p><p class="cat-count">9 stories</p></a>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section" id="subscribe">
+  <div class="newsletter-box">
+    <p class="section-label">Join the Rites</p>
+    <h2 class="section-title" style="font-size:2rem">A New Myth Every Week</h2>
+    <div class="section-rule"></div>
+    <p style="color:var(--text-muted);font-style:italic">A new myth every day — from every civilization on earth. Premium stories delivered to your inbox.</p>
+    <div class="newsletter-input-row">
+      <input type="email" placeholder="your@email.com">
+      <button>Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span style="color:var(--gold)">M</span>YTHORIA</div>
+  <p class="footer-copy">© 2026 Mythoria — Myths & Legends from Every Civilization</p>
+  <nav>
+    <a href="#" style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;">Instagram</a>
+    <a href="#" style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;">Archive</a>
+    <a href="#" style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;">About</a>
+  </nav>
+</footer>
+
+<!-- FULL STORY OVERLAY -->
+<div class="full-story-overlay" id="storyOverlay">
+  <div class="story-backdrop" onclick="closeStory()"></div>
+  <button class="close-btn" onclick="closeStory()">✕</button>
+  <div class="story-panel">
+    <div class="story-panel-inner" id="storyContent"></div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+
+    <div id="paymentForm">
+      <h2 class="modal-title">Unlock Mythoria</h2>
+      <p class="modal-sub">Access every myth from every civilization on earth.</p>
+
+      <div class="modal-currency-toggle">
+        <button class="currency-btn active" id="btnINR" onclick="setCurrency('INR')">🇮🇳 INR (₹)</button>
+        <button class="currency-btn" id="btnUSD" onclick="setCurrency('USD')">🇺🇸 USD ($)</button>
+        <button class="currency-btn" id="btnGBP" onclick="setCurrency('GBP')">🇬🇧 GBP (£)</button>
+      </div>
+
+      <div class="modal-plan-display">
+        <span class="modal-plan-name" id="modalPlanName">Monthly Premium</span>
+        <span class="modal-plan-price" id="modalPlanPrice">₹199 / month</span>
+      </div>
+
+      <div class="modal-field">
+        <label>Your Name</label>
+        <input type="text" id="payerName" placeholder="Enter your name">
+      </div>
+      <div class="modal-field">
+        <label>Email Address</label>
+        <input type="email" id="payerEmail" placeholder="your@email.com">
+      </div>
+      <div class="modal-field">
+        <label>Phone (optional, for UPI)</label>
+        <input type="tel" id="payerPhone" placeholder="+91 98765 43210">
+      </div>
+
+      <button class="modal-pay-btn" id="payBtn" onclick="initiatePayment()">Pay & Unlock Mythoria ✦</button>
+      <div class="modal-security">🔒 Secured by Razorpay · 256-bit SSL encryption</div>
+    </div>
+
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✦</div>
+      <h3>Welcome to Mythoria Premium</h3>
+      <p>The gates are open. Every myth, every civilization, every story — yours.</p>
+      <br>
+      <button class="modal-pay-btn" onclick="closePaymentModal(); unlockAllStories()">Start Reading →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG — REPLACE WITH YOUR RAZORPAY KEY ───────────────────────────────
+const RAZORPAY_KEY = 'rzp_test_YourKeyHere';  // ← Paste your Razorpay Key ID here
+// Get it from: razorpay.com → Dashboard → Settings → API Keys
+// Use rzp_test_... for testing, rzp_live_... for real payments
+// ──────────────────────────────────────────────────────────────────────────
+
+// Payment state
+let currentPlan = 'monthly';
+let currentCurrency = 'INR';
+let isPremium = false;
+
+const prices = {
+  monthly: { INR: { amount: 19900, display: '₹199 / month' }, USD: { amount: 299, display: '$2.99 / month' }, GBP: { amount: 249, display: '£2.49 / month' } },
+  annual:  { INR: { amount: 149900, display: '₹1499 / year' }, USD: { amount: 2499, display: '$24.99 / year' }, GBP: { amount: 1999, display: '£19.99 / year' } }
+};
+
+function openPricingModal(plan, currency) {
+  currentPlan = plan || 'monthly';
+  currentCurrency = currency || 'INR';
+  updateModalDisplay();
+  document.getElementById('successScreen').classList.remove('visible');
+  document.getElementById('paymentForm').style.display = 'block';
+  document.getElementById('paymentModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePaymentModal() {
+  document.getElementById('paymentModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function setCurrency(c) {
+  currentCurrency = c;
+  ['INR','USD','GBP'].forEach(x => document.getElementById('btn'+x).classList.remove('active'));
+  document.getElementById('btn'+c).classList.add('active');
+  updateModalDisplay();
+}
+
+function updateModalDisplay() {
+  const planNames = { monthly: 'Monthly Premium', annual: 'Annual — God Tier' };
+  document.getElementById('modalPlanName').textContent = planNames[currentPlan];
+  document.getElementById('modalPlanPrice').textContent = prices[currentPlan][currentCurrency].display;
+}
+
+function initiatePayment() {
+  const name = document.getElementById('payerName').value.trim();
+  const email = document.getElementById('payerEmail').value.trim();
+  if (!name || !email) { alert('Please enter your name and email to continue.'); return; }
+
+  const priceData = prices[currentPlan][currentCurrency];
+
+  // ── Razorpay Checkout Options ──────────────────────────────────────────
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: priceData.amount,          // Amount in paise/cents (₹199 = 19900 paise)
+    currency: currentCurrency,
+    name: 'Mythoria',
+    description: currentPlan === 'monthly' ? 'Monthly Premium Subscription' : 'Annual Premium Subscription',
+    image: '',                         // Add your logo URL here
+    handler: function(response) {
+      // ✅ Payment successful — response.razorpay_payment_id is the transaction ID
+      // In production: send response.razorpay_payment_id to your backend to verify
+      onPaymentSuccess(response.razorpay_payment_id);
+    },
+    prefill: {
+      name: name,
+      email: email,
+      contact: document.getElementById('payerPhone').value.trim()
+    },
+    notes: {
+      plan: currentPlan,
+      currency: currentCurrency
+    },
+    theme: {
+      color: '#c9a84c',               // Mythoria gold
+      backdrop_color: '#0a0610'
+    },
+    modal: {
+      ondismiss: function() {
+        console.log('Payment cancelled by user');
+      }
+    }
+  };
+
+  // For international payments (USD/GBP), Razorpay auto-enables international cards
+  // Make sure International Payments is ON in: Razorpay Dashboard → Settings → International Payments
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+}
+
+function onPaymentSuccess(paymentId) {
+  console.log('Payment successful:', paymentId);
+  // TODO: Send paymentId to your backend to verify & activate subscription
+  // Example: fetch('/api/verify-payment', { method:'POST', body: JSON.stringify({paymentId}) })
+
+  isPremium = true;
+  document.getElementById('paymentForm').style.display = 'none';
+  document.getElementById('successScreen').classList.add('visible');
+  localStorage.setItem('mythoria_premium', 'true'); // basic client-side flag
+}
+
+function unlockAllStories() {
+  // Remove premium locks from all cards
+  document.querySelectorAll('.story-card.is-premium').forEach(card => {
+    card.classList.remove('is-premium');
+    const badge = card.querySelector('.badge-premium');
+    if (badge) { badge.className = 'badge-free'; badge.textContent = '✦ Premium'; }
+    const lock = card.querySelector('.lock-icon');
+    if (lock) lock.remove();
+  });
+}
+
+// Check if already premium on load
+window.addEventListener('load', () => {
+  if (localStorage.getItem('mythoria_premium') === 'true') {
+    isPremium = true;
+    unlockAllStories();
+  }
+});
+
+// ── STORIES DATA ───────────────────────────────────────────────────────────
+const stories = {
+  osiris: {
+    myth: 'Egyptian Mythology', title: 'The First Betrayal',
+    subtitle: "The story of Osiris, Set, and the birth of resurrection",
+    premium: false, tags: ['Death','Betrayal','Resurrection','Egyptian'],
+    color: 'rgba(201,168,76,0.15)',
+    body: `<p class="story-drop-cap">In the beginning of the Egyptian world, there were eight gods, and among them, Osiris was the most beloved. He was the first king — tall, green-skinned, radiant with life. He gave humanity agriculture, law, and civilization. Under his rule, people stopped eating each other and started building things instead.</p>
+    <p>His brother Set noticed this. Set, the god of storms, deserts, and chaos, had always lived in Osiris's shadow. And shadows, over centuries, begin to seethe.</p>
+    <div class="verse">"He measured his brother while he slept.<br>He built the perfect coffin.<br>He threw a feast and called it a game."</div>
+    <p>Set's plan was elegant and vicious. He commissioned a magnificent coffin — carved to the exact measurements of Osiris's sleeping body — and at a great banquet, offered it as a gift to whoever could fit inside perfectly. Guest after guest climbed in. None fit. Then Osiris lay down. And he fit precisely.</p>
+    <p>The lid slammed shut. The coffin was sealed with lead and thrown into the Nile.</p>
+    <div class="pull-quote">The murder took seven seconds. The grief lasted forever.</div>
+    <p>Isis, Osiris's wife and the greatest sorceress in Egypt, spent years searching. She found the coffin lodged in a tamarisk tree in Byblos, which had grown around it like a shrine. She retrieved her husband's body and brought it home — but Set found it again, and this time he was not content with burial.</p>
+    <p>He cut Osiris into fourteen pieces and scattered them across Egypt.</p>
+    <p>Isis and her sister Nephthys spent forty years gathering them. They found thirteen pieces. They never found the last — the god of the Nile had swallowed it. So Isis, working with a mother's grief and a goddess's power, fashioned a replacement. And she breathed life back into her husband long enough to conceive a son.</p>
+    <p>That son was Horus. He grew up in hiding among the marshes. He trained for war. He avenged his father in one of the longest battles in Egyptian mythology — a conflict so brutal it lasted eighty years.</p>
+    <p>And Osiris? He descended to rule the kingdom of the dead — the realm of judgment, justice, and passage. He became the god of resurrection itself. The one murdered by chaos became the lord of all who die.</p>
+    <div class="verse">"Every death is a Nile seed.<br>Every spring is Osiris, returning.<br>The grain grows because a god was broken first."</div>
+    <p>The story of Osiris is the oldest resurrection myth in the world. It predates Christianity by three thousand years. It is the story of every seed placed in dark soil and left for winter. It is the story of what comes back.</p>`
+  },
+  medusa: {
+    myth: 'Greek Mythology', title: 'Medusa Was Not the Monster',
+    subtitle: "The true story of the woman turned to stone by a god's punishment",
+    premium: false, tags: ['Victim','Injustice','Greek','Women'],
+    color: 'rgba(107,63,160,0.2)',
+    body: `<p class="story-drop-cap">Before she was a monster, Medusa was a priestess. She served Athena in her temple — one of the three Gorgon sisters, the only one who was mortal. Ancient sources describe her as extraordinarily beautiful, her hair a crowning glory. She had taken vows of purity, of devotion, of lifelong service to the goddess of wisdom.</p>
+    <p>Then Poseidon came.</p>
+    <p>The god of the seas — vast, ancient, used to getting what he wanted — found Medusa in Athena's own temple and assaulted her. What all versions agree on: Medusa did not consent. She was a priestess of a virgin goddess, desecrated in that goddess's most sacred space.</p>
+    <div class="pull-quote">The gods had absolute power. That was always the problem.</div>
+    <p>And Athena's response? She punished Medusa. The goddess of wisdom transformed her. The beautiful hair became a mass of living serpents. The lovely face became a death mask. The gaze that had once drawn admiration now turned living things to stone.</p>
+    <div class="verse">"She did not ask for the serpents.<br>She did not ask for the gaze that kills.<br>She was handed a weapon by the goddess<br>who could not admit she'd failed her."</div>
+    <p>Medusa lived in exile after that. At the edge of the world, near the land of the dead. She was not attacking anyone. She was surviving.</p>
+    <p>And then Perseus came — guided by the gods, equipped with a mirror-shield and divine sandals — to cut off her head for a trophy.</p>
+    <p>What is rarely told: from Medusa's severed neck, two children leapt — Chrysaor and the winged horse Pegasus. They were Poseidon's children. She had been pregnant when she died, and no one in the myth stops to notice the particular tragedy of that.</p>
+    <p>Athena took Medusa's head and mounted it on her own aegis — the divine shield she wore into battle. So the goddess who had punished her now used her power as armor. There is something in that arrangement that deserves to be looked at for a long time.</p>
+    <p>Medusa could not look away from what had happened to her. The gaze that turned men to stone was not a curse. It was the only defense she had been given.</p>`
+  },
+  athena: {
+    myth: 'Greek Mythology', title: 'Born Screaming',
+    subtitle: "The violent miracle of Athena's birth, and what it cost Metis",
+    premium: true, tags: ['Birth','Power','Greek','Wisdom'],
+    color: 'rgba(201,168,76,0.12)',
+    body: `<p class="story-drop-cap">It began with a prophecy. The Titaness Metis — whose name means Wisdom — was pregnant with Zeus's child. An oracle whispered that this child would surpass her father, would overthrow the king of Olympus just as Zeus had overthrown Cronus.</p>
+    <p>Zeus heard the prophecy. Zeus acted with the decisive, overwhelming logic of a king who had fought too hard for his throne to lose it to a baby.</p>
+    <p>He swallowed Metis whole.</p>
+    <p>She was still pregnant. He swallowed her anyway. And deep inside the king of the gods, in the darkness of his stomach, the wisest being who had ever lived continued to exist — advising, thinking, weaving. Some say she is there still, whispering wisdom to him from the inside.</p>
+    <div class="verse">"The most dangerous thing in the ancient world<br>was a woman who knew more than the king.<br>He solved this the way kings always solve it."</div>
+    <p>Time passed. A headache began. Not a common headache — a headache that made mountains shake, that turned the sky the color of old blood. Zeus's skull felt like it would split.</p>
+    <p>In desperation, he summoned Hephaestus — the craftsman god, the smith who made divine weapons. Hephaestus raised his axe, took aim at the king of the gods' head, and struck with precision.</p>
+    <p>The skull opened. And from it leapt Athena — fully armored in gleaming silver, her spear already raised, her aegis already catching the light. She landed on the ground and immediately let out a war cry that made the heavens and earth tremble together.</p>
+    <div class="pull-quote">She was born armed. She had never been anywhere safe, not for a single moment.</div>
+    <p>Athena became the goddess of wisdom, craft, strategy, and just war. She never married. She remained a virgin goddess, autonomous, armored, answering to no husband.</p>
+    <p>But behind the magnificent birth there is a quieter story. Metis — Wisdom herself — vanished inside Zeus and was never freed. Her wisdom became his. Her power became his. She became a voice inside the conquering god, her existence reduced to an echo that makes him sound wiser than he is.</p>
+    <p>Every time Athena was called the child of Zeus, the inheritance was accurate. What was also accurate, and rarely spoken aloud: she was the child of a woman who was swallowed so that a king could sleep soundly.</p>`
+  },
+  prometheus: {
+    myth: 'Greek Mythology', title: 'The Thief Who Loved Mortals',
+    subtitle: "What Prometheus gave up, and why he would do it again",
+    premium: true, tags: ['Sacrifice','Fire','Greek','Creation'],
+    color: 'rgba(180,60,20,0.15)',
+    body: `<p class="story-drop-cap">The Titan Prometheus did not have to care about humans. He was ancient and vast and immortal. Humanity was a small experiment — soft-bodied, short-lived, fumbling creatures who slept on the ground and froze in winter. The gods watched them from Olympus with something between amusement and contempt.</p>
+    <p>Prometheus watched with something else.</p>
+    <p>He had shaped humans from clay. Not metaphorically — in the Greek tradition, Prometheus was the one who had mixed earth and water and breathed something into it. He had made them, and he could not look at what he had made and feel nothing.</p>
+    <div class="verse">"What is a father who watches his children freeze<br>while the fire belongs to someone else?<br>What kind of god turns away?"</div>
+    <p>Zeus had decided that humans would not have fire. Fire was divine. Zeus held it on Olympus and let the humans shiver.</p>
+    <p>Prometheus climbed to the place where the sun's chariot passed. He held a hollow fennel stalk — dried, pithy, perfect for carrying an ember. And he reached up and stole a coal from the sun.</p>
+    <p>He carried it down. He gave it to humanity.</p>
+    <div class="pull-quote">He knew exactly what Zeus would do. He did it anyway.</div>
+    <p>Within a generation, humanity exploded. They cooked their food and didn't die of disease. They forged metal. They lit lamps and worked through the night and invented poetry and geometry and philosophy. Everything that humans became, they became because of fire — and fire came from a god who chose to be punished rather than watch his children suffer.</p>
+    <p>Zeus's punishment was without mercy. Prometheus was chained to a rock in the Caucasus mountains — chains forged by Hephaestus, unbreakable, inescapable. Every day, an eagle descended and ate his liver. Every night, because he was immortal, the liver grew back. Every morning, the eagle returned.</p>
+    <p>This went on for thirty years. Some say three thousand.</p>
+    <p>Heracles eventually freed him, shooting the eagle and breaking the chains. But by then, humanity had become what it became. Cities. Science. Art. War. The whole complicated catastrophe of civilization, lit by a stolen fire.</p>`
+  },
+  persephone: {
+    myth: 'Greek Mythology', title: 'Queen of Two Worlds',
+    subtitle: "The myth of Persephone — what was stolen, and what was chosen",
+    premium: true, tags: ['Seasons','Power','Greek','Womanhood'],
+    color: 'rgba(107,63,160,0.15)',
+    body: `<p class="story-drop-cap">Every winter, the Greeks said, is Demeter mourning. The great goddess of harvest tore the green from the earth and froze the ground with grief because her daughter was gone, living in the dark realm below. Every spring was Persephone returning. Every flower was a mother's relief.</p>
+    <p>That is one version of the story. The comfortable version. The older version is more interesting.</p>
+    <div class="verse">"She ate the pomegranate seeds.<br>The question that no one asks:<br>did she know what they were for?"</div>
+    <p>In the Homeric Hymn to Demeter — our oldest substantial source — Persephone is out gathering flowers when the ground opens and Hades appears in his black chariot. He takes her to the underworld. This is inarguably abduction in the ancient text.</p>
+    <p>But the older fragments, the pre-Olympian traditions, the mystery cults of Eleusis — these tell a different story. Persephone was called Kore, the Maiden, above. Below she was called Despoina. The Mistress. No one dared speak her true name above ground.</p>
+    <div class="pull-quote">The daughter of the harvest became the queen of the dead. She is both things simultaneously. She always was.</div>
+    <p>The six pomegranate seeds she ate — every Greek child knew that eating the food of the dead bound you to the dead realm forever. Persephone ate them. Deliberately, the mystery tradition held. Not because she was tricked, but because she understood what she was eating and chose to bind herself to both worlds.</p>
+    <p>Consider what this means. Above: she was Kore, the Maiden, the daughter, the one whose identity was entirely defined by her relationship to her mother. Below: she was the Queen of the Dead, co-ruler of the largest kingdom in the cosmos, the one who heard the pleas of the dying, who granted passage, who held authority over every human soul.</p>
+    <p>The myth of Persephone is the myth of the girl who was told she must choose between her mother's world and the dark world, and who refused to choose. She ate the seeds. She came back in spring. She went down in autumn. She became the only deity in the Greek pantheon who held citizenship in both realms.</p>`
+  },
+  hades: {
+    myth: 'Greek Mythology', title: 'The God They Feared to Name',
+    subtitle: "Why Hades is the most misunderstood god in all of ancient myth",
+    premium: true, tags: ['Death','Justice','Greek','Underworld'],
+    color: 'rgba(139,26,46,0.15)',
+    body: `<p class="story-drop-cap">The Greeks were so afraid of him that they rarely spoke his name. Instead they used euphemisms: the Rich One, the Unseen, the Host of Many. They turned their faces away when they made offerings to him and poured libations into pits in the ground rather than altars.</p>
+    <p>And yet. In three thousand years of Greek myth, Hades never starts a war. He never cheats on his wife. He never transforms mortals into animals out of pique. He never floods the earth or creates monsters or rains plague on cities. He sits in his palace below the world and he does his job with unwavering consistency.</p>
+    <div class="verse">"He rules the dead but he is not the god of death.<br>Thanatos is the god of death. Hades is the god<br>of what comes after — which is order, and justice,<br>and the long final accounting."</div>
+    <p>When the three brothers drew lots for their kingdoms after the Titanomachy, Zeus got the sky, Poseidon got the sea, and Hades got the underworld. He did not get the worst deal. He got the permanent deal. The sky and sea are disputed, invaded, competed over. No one challenges Hades for his realm. All things come to him eventually.</p>
+    <div class="pull-quote">The only god who never abandoned his post. The only god who answered to no one and chose to be just anyway.</div>
+    <p>The court of the dead operated with more consistent justice than Olympus ever managed. Three judges — Minos, Rhadamanthus, and Aeacus — reviewed each soul. The wicked went to Tartarus. The virtuous went to Elysium. The ordinary went to the grey fields of Asphodel and simply waited. There was no bribery, no divine favoritism, no escaping the judgment because you happened to be the child of a powerful god.</p>
+    <p>When Orpheus played his lyre and wept for Eurydice, Hades wept with Persephone and said yes. The condition he attached — don't look back — was a test, not a trap. He gave the musician every chance.</p>
+    <p>They feared him because he was unavoidable. They should have respected him because he was just. The two things were too tangled to separate, and so they turned their faces away, and made their offerings in the dark, and hoped not to be noticed for a while longer.</p>`
+  }
+};
+
+// ── OPEN / CLOSE STORY ─────────────────────────────────────────────────────
+function openStory(id) {
+  const s = stories[id];
+  if (!s) return;
+
+  // If premium story and user not premium → show paywall modal
+  if (s.premium && !isPremium) {
+    openPricingModal('monthly', 'INR');
+    return;
+  }
+
+  const panel = document.getElementById('storyContent');
+  panel.innerHTML = `
+    <div class="story-bg-glow" style="background:radial-gradient(ellipse 80% 60% at 50% 0%, ${s.color} 0%, transparent 60%);"></div>
+    <p class="story-eyebrow">${s.myth}</p>
+    <h1 class="story-title">${s.title}</h1>
+    <p class="story-subtitle">${s.subtitle}</p>
+    <div class="story-body">${s.body}</div>
+    ${s.premium ? '' : `
+    <div class="paywall-blur">
+      <div class="paywall-blur-content">
+        <p style="color:rgba(245,234,208,0.9);margin-bottom:1.5rem">The deeper story continues — the hidden details that ancient texts buried, the versions that priests kept from common people, the threads that connect this myth to three other civilizations...</p>
+        <p style="color:rgba(245,234,208,0.9)">Premium members unlock the full extended archive and every new myth published daily.</p>
+      </div>
+      <div class="paywall-box">
+        <h3>Continue the Story</h3>
+        <p>Unlock the full archive · New myth every day · All 6 pantheons</p>
+        <button class="paywall-unlock-btn" onclick="closeStory(); openPricingModal('monthly','INR')">Unlock Premium — ₹199/month ✦</button>
+      </div>
+    </div>`}
+    <div class="story-footer">
+      ${s.tags.map(t => `<span class="myth-tag">${t}</span>`).join('')}
+    </div>
+  `;
+  const overlay = document.getElementById('storyOverlay');
+  overlay.classList.add('active');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStory() {
+  document.getElementById('storyOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeStory(); closePaymentModal(); }
+});
+</script>
+</body>
+</html>
